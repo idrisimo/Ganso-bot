@@ -1,7 +1,6 @@
 const qrcode = require('qrcode-terminal');
-const { Client, LocalAuth, Buttons, List } = require('whatsapp-web.js');
-const { lfgxup, waitFor } = require('./handlers');
-// require('dotenv').config();
+const { Client, LocalAuth} = require('whatsapp-web.js');
+const {CronJob} = require("cron")
 
 
 
@@ -30,8 +29,21 @@ client.on('auth_failure', msg => {
     console.error('AUTHENTICATION FAILURE', msg);
 });
 
-client.on('ready', () => {
+client.on('ready', async () => {
     console.log('Client is ready!');
+
+    const groupName = "Test group"
+    const chats =  await client.getChats()
+    const groups = chats.filter(chat => chat.isGroup && chat.name == groupName).map(chat => {
+        return chat
+    })
+    console.log('Before job instantiation');
+    const job = new CronJob('00 10 23 * * *', function() {
+        client.sendMessage(groups[0].id._serialized, "test message")
+        console.log("message sent at: ", Date().getTime())
+    });
+    console.log('After job instantiation');
+    job.start();
 });
 
 client.initialize();
@@ -39,13 +51,12 @@ client.initialize();
 
 /* Main section of code */
 client.on('message', async msg=>{
-    console.log('message: ', msg)
+    // console.log('message: ', msg)
     if(msg.body === "!ping") {
         let chat = await msg.getChat();
         if(chat.isGroup && chat.name === "Test group") {
-            console.log("this is chat", chat)
+            // console.log("this is chat", chat)
             client.sendMessage(chat.id._serialized,"*🤖--BAMBOO BOT--🤖* says: pong")
         }
     }
 }) 
-
