@@ -49,7 +49,7 @@ client.on('ready', async () => {
 client.initialize();
 
 
-/* Main section of code */
+/* Commands go here */
 client.on('message', async msg=>{
     // console.log('message: ', msg)
     if(msg.body === "!ping") {
