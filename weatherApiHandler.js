@@ -1,7 +1,8 @@
+const fetch = require("node-fetch")
 
-const fetchWeather = async (endpointName="Forcast", apiKey, location, days=2, alerts="yes") => {
-    const baseUrl = "http://api.weatherapi.com/v1"
 
+const fetchWeather = async ({endpointName="Forcast", apiKey, location, days=2, alerts="yes"}) => {
+    const baseUrl = "https://api.weatherapi.com/v1"
     const endpointOptions = {"Current weather":"/current.json", "Forcast":"/forecast.json", "Search or Autocomplete":"/search.json", "History":"/history.json", "Future":"/future.json", "Time Zone":"/timezone.json", "Sports":"/sports.json", "Astronomy":"	/astronomy.json ","IP Lookup":"/ip.json"}
 
     /*Notes on Parameters*/
@@ -21,13 +22,20 @@ const fetchWeather = async (endpointName="Forcast", apiKey, location, days=2, al
             throw new Error(message)
         }
         const weatherData = await response.json()
+        // console.log(weatherData)
         return weatherData
     } else {
-        return "endpoint currently unavailable"
+        return `endpoint currently unavailable. Selected endpoint: ${selectedEndPoint}`
     }
 }
 
 
-const formatWeather = (weatherData) => {
-
+const cleanTomorrowForcast = (weatherData) => {
+    const tomorrowData = weatherData['forecast']['forecastday'][1]['day']
+    const cleanedData = (({maxtemp_c, mintemp_c, avgtemp_c, daily_will_it_rain,daily_chance_of_snow, condition}) => ({maxtemp_c, mintemp_c, avgtemp_c, daily_will_it_rain,daily_chance_of_snow, condition}))(tomorrowData) // So Object destructuring is cool!
+    return cleanedData
 }
+
+const weather = fetchWeather({apiKey:"", location:"Luton"}).then(data => cleanTomorrowForcast(data))
+
+// console.log(weather)
