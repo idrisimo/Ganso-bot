@@ -1,44 +1,31 @@
-const { CronJob } = require("cron")
 
 
-console.log('Before job instantiation');
-const job = new CronJob('00 28 23 * * *', function() {
-	const d = new Date();
-	console.log('Midnight:', d);
-});
-console.log('After job instantiation');
-job.start();
-
-
-const testFunc = () => {
-    console.log("this is a test")
+const makeTable = (dataList) => {
+    let tables = []
+    for (const data of dataList) {
+        const table = `
+        =======${data['location']}=======\n
+        | Max temp | Avg temp | Min temp |
+        =================================
+        | ${data['maxtemp_c']} | ${data['avgtemp_c']} | ${data['mintemp_c']} | 
+        `
+    }
 }
 
-
-const scheduler = (scheduledTime, func) => {
-    let testVar = ""
-    func()
-    counter = 0
-    console.log("start")
-    // setInterval(() =>{
-    //     console.log(testVar)
-    //     const timeNow = new Date().toLocaleTimeString("en-GB", {hour: '2-digit', minute:'2-digit'})
-    //     const futureTime = new Date( new Date().getTime() + 60000).toLocaleTimeString("en-GB", {hour: '2-digit', minute:'2-digit'})
-    //     console.log(`Current time is: ${timeNow}`)
-    //     console.log(`Future time is: ${futureTime}`)
-    //     testVar = "this is not a drill"
-    //     if (scheduledTime === timeNow && counter === 0) {
-    //         console.log("send text")
-    //         console.log(`Alarm activated`)
-    //         counter = 1
-    //     } else if (scheduledTime === futureTime && counter === 1) {
-
-    //     }
-    // }, 2000);
-    let timing
-
+const formatForText = (dataList) => {
+    // console.log(dataList)
+    let text = []
+    for (const data of dataList) {
+        const string = `=====${data['location']}=====
+        *Min/Avg/Max temp*: ${data['mintemp_c']}°C/${data['avgtemp_c']}°C/${data['maxtemp_c']}°C
+        *Chance of rain*: ${data['daily_chance_of_rain']}% 
+        *Change of snow*: ${data['daily_chance_of_snow']}% 
+        *Description*: ${data['condition']['text']}`.split("\n").map(s=>s.trim()).join("\n")
+        // console.log(string)
+        text.push(string)
+    }
+    console.log(text[0])
+    return text
 }
 
-// scheduler("22:21", testFunc)
-
-module.exports = {}
+module.exports = {formatForText}
