@@ -1,8 +1,8 @@
 const qrcode = require('qrcode-terminal');
 const { Client, LocalAuth} = require('whatsapp-web.js');
 const {CronJob} = require("cron")
-
-
+const {fetchWeather, cleanTomorrowForecast} = require('./weatherApiHandler');
+const { formatForText } = require('./handlers');
 
 /* User settings */
 
@@ -38,9 +38,13 @@ client.on('ready', async () => {
         return chat
     })
     console.log('Before job instantiation');
-    const job = new CronJob('00 10 23 * * *', function() {
-        client.sendMessage(groups[0].id._serialized, "test message")
-        console.log("message sent at: ", Date().getTime())
+    const job = new CronJob('00 10 00 * * *', function() {
+        
+        fetchWeather({apiKey:"", location:"Luton"}).then(data => {
+            const weatherText = formatForText([cleanTomorrowForecast(data)])
+            client.sendMessage(groups[0].id._serialized, weatherText)
+            console.log("message sent at: ", Date())
+        }).catch(err => console.log(err.message))
     });
     console.log('After job instantiation');
     job.start();

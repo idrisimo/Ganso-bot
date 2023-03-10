@@ -1,5 +1,7 @@
 const fetch = require("node-fetch")
+const { formatForText } = require("./handlers")
 
+// https://www.weatherapi.com/
 
 const fetchWeather = async ({endpointName="Forcast", apiKey, location, days=2, alerts="yes"}) => {
     const baseUrl = "https://api.weatherapi.com/v1"
@@ -30,12 +32,14 @@ const fetchWeather = async ({endpointName="Forcast", apiKey, location, days=2, a
 }
 
 
-const cleanTomorrowForcast = (weatherData) => {
-    const tomorrowData = weatherData['forecast']['forecastday'][1]['day']
-    const cleanedData = (({maxtemp_c, mintemp_c, avgtemp_c, daily_will_it_rain,daily_chance_of_snow, condition}) => ({maxtemp_c, mintemp_c, avgtemp_c, daily_will_it_rain,daily_chance_of_snow, condition}))(tomorrowData) // So Object destructuring is cool!
+const cleanTomorrowForecast = (weatherData) => {
+    const forecastData = weatherData['forecast']['forecastday'][1]['day']
+    const cleanedData = (({maxtemp_c, mintemp_c, avgtemp_c, daily_chance_of_rain,daily_chance_of_snow, condition}) => ({maxtemp_c, mintemp_c, avgtemp_c, daily_chance_of_rain, daily_chance_of_snow, condition}))(forecastData) // So Object destructuring is cool!
+    cleanedData['location'] = weatherData['location']['name']
+    // console.log(cleanedData)
+    
     return cleanedData
 }
 
-const weather = fetchWeather({apiKey:"", location:"Luton"}).then(data => cleanTomorrowForcast(data))
 
-// console.log(weather)
+module.exports = {fetchWeather, cleanTomorrowForecast}

@@ -13,7 +13,6 @@ const makeTable = (dataList) => {
 }
 
 const formatForText = (dataList) => {
-    // console.log(dataList)
     let text = []
     for (const data of dataList) {
         const string = `=====${data['location']}=====
@@ -21,11 +20,9 @@ const formatForText = (dataList) => {
         *Chance of rain*: ${data['daily_chance_of_rain']}% 
         *Change of snow*: ${data['daily_chance_of_snow']}% 
         *Description*: ${data['condition']['text']}`.split("\n").map(s=>s.trim()).join("\n")
-        // console.log(string)
         text.push(string)
     }
-    console.log(text[0])
-    return text
+    return text[0]
 }
 
 module.exports = {formatForText}
