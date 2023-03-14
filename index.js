@@ -14,7 +14,7 @@ const apiKey = process.env.WEATHER_API_KEY;
 /* Initialisation and authentication */
 const client = new Client({
     authStrategy: new LocalAuth(),
-    puppeteer: { headless: true }
+    puppeteer: { headless: true, args: ['--no-sandbox'] }
 });
 
 client.on('qr', qr => {
