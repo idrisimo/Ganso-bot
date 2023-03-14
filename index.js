@@ -2,12 +2,13 @@ const qrcode = require('qrcode-terminal');
 const { Client, LocalAuth} = require('whatsapp-web.js');
 const {CronJob} = require("cron")
 const {fetchWeather, cleanTomorrowForecast} = require('./weatherApiHandler');
-const { formatForText } = require('./handlers');
+const { formatForText, getLocations } = require('./handlers');
+require('dotenv').config();
 
 /* User settings */
-
-const timer = parseInt(process.env.TIMER) //In seconds
+const timeTrigger = process.env.TIME_TRIGGER;
 const groupName = process.env.WHATSAPP_GROUPNAME;
+const apiKey = process.env.WEATHER_API_KEY;
 
 
 /* Initialisation and authentication */
@@ -32,19 +33,21 @@ client.on('auth_failure', msg => {
 client.on('ready', async () => {
     console.log('Client is ready!');
 
-    const groupName = "Test group"
+    // const groupName = "Test group"
     const chats =  await client.getChats()
     const groups = chats.filter(chat => chat.isGroup && chat.name == groupName).map(chat => {
         return chat
     })
     console.log('Before job instantiation');
-    const job = new CronJob('00 10 00 * * *', function() {
-        
-        fetchWeather({apiKey:"", location:"Luton"}).then(data => {
-            const weatherText = formatForText([cleanTomorrowForecast(data)])
+    const job = new CronJob(`${timeTrigger}* * *`, function() {
+        const locations = getLocations(groups[0].description)
+        fetchWeather({apiKey:apiKey, locations:locations}).then(data => {
+            const weatherText = formatForText(cleanTomorrowForecast(data)).join("")
+
             client.sendMessage(groups[0].id._serialized, weatherText)
+
             console.log("message sent at: ", Date())
-        }).catch(err => console.log(err.message))
+        }).catch(err => console.log(err))
     });
     console.log('After job instantiation');
     job.start();
