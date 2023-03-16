@@ -33,13 +33,12 @@ client.on('auth_failure', msg => {
 client.on('ready', async () => {
     console.log('Client is ready!');
 
-    // const groupName = "Test group"
     const chats =  await client.getChats()
     const groups = chats.filter(chat => chat.isGroup && chat.name == groupName).map(chat => {
         return chat
     })
     console.log('Before job instantiation');
-    const job = new CronJob(`${timeTrigger}* * *`, function() {
+    const job = new CronJob(`${timeTrigger} * * *`, function() {
         const locations = getLocations(groups[0].description)
         fetchWeather({apiKey:apiKey, locations:locations}).then(data => {
             const weatherText = formatForText(cleanTomorrowForecast(data)).join("")
@@ -55,15 +54,12 @@ client.on('ready', async () => {
 
 client.initialize();
 
-
 /* Commands go here */
 client.on('message', async msg=>{
-    // console.log('message: ', msg)
     if(msg.body === "!ping") {
         let chat = await msg.getChat();
-        if(chat.isGroup && chat.name === "Test group") {
-            // console.log("this is chat", chat)
-            client.sendMessage(chat.id._serialized,"*🤖--BAMBOO BOT--🤖* says: pong")
+        if(chat.isGroup && chat.name === groupName) {
+            client.sendMessage(chat.id._serialized,"*🦢🤖--Ganso-bot--🤖🦢* says: pong")
         }
     }
 }) 
