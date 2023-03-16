@@ -1,5 +1,7 @@
 FROM node:16 AS app
 
+WORKDIR /usr/app
+
 # We don't need the standalone Chromium
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 
