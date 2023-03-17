@@ -50,9 +50,4 @@ const cleanTomorrowForecast = (weatherDataList) => {
     return cleanedDataList
 }
 
-
-// fetchWeather({apiKey:"85aa9597397e4e15a86232902230803", locations:["Luton", "Hitchin", "Hertford"]}).then(data => {
-//     const weatherText = formatForText(cleanTomorrowForecast(data))
-// }).catch(err => console.log(err.message))
-
 module.exports = {fetchWeather, cleanTomorrowForecast}

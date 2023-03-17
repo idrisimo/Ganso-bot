@@ -4,9 +4,7 @@ const formatForText = (dataList) => {
     let text = []
 
     for (const data of dataList) {
-        const string = `🦢🤖--Ganso-bot--🤖🦢
-        "Tomorrows weather"
-        *Location*:
+        const string = `*Location*:
         ${data['location']}
         *Min | Avg | Max temp*: 
         ${data['mintemp_c']}°C | ${data['avgtemp_c']}°C | ${data['maxtemp_c']}°C
