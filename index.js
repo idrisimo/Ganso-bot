@@ -71,7 +71,7 @@ client.on('message_create', async msg=>{
                 Description: ${chat.description}
                 Created At: ${chat.createdAt.toString()}
                 Created By: ${chat.owner.user}
-                Participant count: ${chat.participants.length}`
+                Participant count: ${chat.participants.length}`.split("\n").map(s=>s.trim()).join("\n")
                 break;
             case "!help":
                 message = "Command List:\n-*!ping*--pong\n-*!groupinfo*--Provides information about group chat."
