@@ -42,7 +42,7 @@ client.on('ready', async () => {
         const locations = getLocations(groups[0].description)
         fetchWeather({apiKey:apiKey, locations:locations}).then(data => {
             const weatherText = formatForText(cleanTomorrowForecast(data)).join("")
-            const textToSend = `🦢🤖--Ganso-bot--🤖🦢
+            const textToSend = `*🦢🤖--Ganso-bot--🤖🦢*
             "Tomorrows weather"
             ${weatherText}`.split("\n").map(s=>s.trim()).join("\n")
 
@@ -58,11 +58,32 @@ client.on('ready', async () => {
 client.initialize();
 
 /* Commands go here */
-client.on('message', async msg=>{
-    if(msg.body === "!ping") {
-        let chat = await msg.getChat();
-        if(chat.isGroup && chat.name === groupName) {
-            client.sendMessage(chat.id._serialized,"*🦢🤖--Ganso-bot--🤖🦢* says: pong")
+client.on('message_create', async msg=>{
+    let chat = await msg.getChat();
+    if(chat.isGroup && chat.name === groupName) {
+        let message = ""
+        switch(msg.body){
+            case "!ping":
+                message = "pong"
+                break;
+            case "!groupinfo":
+                message = `Name: ${chat.name}
+                Description: ${chat.description}
+                Created At: ${chat.createdAt.toString()}
+                Created By: ${chat.owner.user}
+                Participant count: ${chat.participants.length}`
+                break;
+            case "!help":
+                message = "Command List:\n-*!ping*--pong\n-*!groupinfo*--Provides information about group chat."
+                break;
+            default: 
+                message = ""
+                break;
+        }
+
+        if( message !== "") {
+            const messageToSend = `*🦢🤖--Ganso-bot--🤖🦢* says: ${message}`
+            client.sendMessage(chat.id._serialized, messageToSend)
         }
     }
 }) 
