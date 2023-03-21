@@ -43,7 +43,7 @@ client.on('ready', async () => {
         fetchWeather({apiKey:apiKey, locations:locations}).then(data => {
             const weatherText = formatForText(cleanTomorrowForecast(data)).join("")
             const textToSend = `*🦢🤖--Ganso-bot--🤖🦢*
-            "Tomorrows weather"
+            *"Tomorrows weather"*
             ${weatherText}`.split("\n").map(s=>s.trim()).join("\n")
 
             client.sendMessage(groups[0].id._serialized, textToSend)
