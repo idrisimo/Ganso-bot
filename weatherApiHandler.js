@@ -38,8 +38,10 @@ const cleanTomorrowForecast = (weatherDataList) => {
     
     for (const weatherData of weatherDataList) {
         const forecastData = weatherData['forecast']['forecastday'][1]['day']
+        const astro = weatherData['forecast']['forecastday'][1]['astro']
         const cleanedData = (({maxtemp_c, mintemp_c, avgtemp_c, daily_chance_of_rain,daily_chance_of_snow, condition}) => ({maxtemp_c, mintemp_c, avgtemp_c, daily_chance_of_rain, daily_chance_of_snow, condition}))(forecastData) // So Object destructuring is cool!
         cleanedData['location'] = weatherData['location']['name']
+        cleanedData['astro'] = {'sunrise': astro['sunrise'], 'sunset': astro['sunset']}
         
         if(cleanedData['condition']['text'] === null) {
             cleanedData['condition']['text'] = "Nothing to report."

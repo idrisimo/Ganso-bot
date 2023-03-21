@@ -12,6 +12,8 @@ const formatForText = (dataList) => {
         ${data['daily_chance_of_rain']}% 
         *Change of snow*: 
         ${data['daily_chance_of_snow']}%
+        *Sunset | Sunrise*:
+        ${data['astro']['sunrise']} | ${data['astro']['sunset']}
 
         `.split("\n").map(s=>s.trim()).join("\n")
         text.push(string)
