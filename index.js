@@ -32,7 +32,7 @@ client.on('auth_failure', msg => {
 
 client.on('ready', async () => {
     console.log('Client is ready!');
-
+    console.log(`evnvar: ${timeTrigger} | ${groupName}`)
     const chats =  await client.getChats()
     const groups = chats.filter(chat => chat.isGroup && chat.name == groupName).map(chat => {
         return chat
