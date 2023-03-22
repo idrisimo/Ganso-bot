@@ -60,21 +60,29 @@ client.initialize();
 /* Commands go here */
 client.on('message_create', async msg=>{
     let chat = await msg.getChat();
-    if(chat.isGroup && chat.name === groupName) {
+    if(chat.isGroup && chat.name === groupName || chat.name === "Test group") {
         let message = ""
+        const locations = getLocations(chat.description)
         switch(msg.body){
             case "!ping":
                 message = "pong"
                 break;
             case "!groupinfo":
-                message = `Name: ${chat.name}
-                Description: ${chat.description}
-                Created At: ${chat.createdAt.toString()}
-                Created By: ${chat.owner.user}
-                Participant count: ${chat.participants.length}`.split("\n").map(s=>s.trim()).join("\n")
+                message = `*Name*: ${chat.name}
+                *Description*: ${chat.description}
+                *Created A*t: ${chat.createdAt.toString()}
+                *Created By*: ${chat.owner.user}
+                *Participant count*: ${chat.participants.length}`.split("\n").map(s=>s.trim()).join("\n")
                 break;
             case "!help":
-                message = "Command List:\n-*!ping*--pong\n-*!groupinfo*--Provides information about group chat."
+                message = "Command List:\n-*!ping*--pong\n-*!groupinfo*--Provides information about group chat.\n*!astro--Provides sunrise and sunset times for the following day*"
+                break;
+            case "!astro":
+                const getWeatherData = await fetchWeather({apiKey:apiKey, locations:locations})
+                const astroData = await cleanTomorrowForecast(getWeatherData)[0]['astro']
+                console.log(astroData)
+                message = `*Sunrise*🌄: ${astroData['sunrise']}
+                *Sunset*🌇: ${astroData['sunset']}`.split("\n").map(s=>s.trim()).join("\n")
                 break;
             default: 
                 message = ""
@@ -82,8 +90,8 @@ client.on('message_create', async msg=>{
         }
 
         if( message !== "") {
-            const messageToSend = `*🦢🤖--Ganso-bot--🤖🦢* says: ${message}`
-            client.sendMessage(chat.id._serialized, messageToSend)
+            const messageToSend = `*🦢🤖--Ganso-bot--🤖🦢* says:\n ${message}`
+            await client.sendMessage(chat.id._serialized, messageToSend)
         }
     }
 }) 

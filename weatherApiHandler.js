@@ -18,7 +18,7 @@ const fetchWeather = async ({endpointName="Forcast", apiKey, locations, days=2, 
         for (const location of locations) {
             const constructedUrl = `${baseUrl}${selectedEndPoint}?key=${apiKey}&q=${location}&days=${days}&alerts=${alerts}` // Eventually this will need to be moved to before the if statement to save on repitition
 
-            const response = await fetch(constructedUrl)
+            let response = await fetch(constructedUrl)
             if(!response.ok) {
                 const message = `An error has occured: ${response.status}`
                 throw new Error(message)
