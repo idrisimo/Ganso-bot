@@ -10,7 +10,7 @@ const formatForText = (dataList) => {
         ${data['mintemp_c']}°C | ${data['avgtemp_c']}°C | ${data['maxtemp_c']}°C
         *Chance of rain*: 
         ${data['daily_chance_of_rain']}% 
-        *Change of snow*: 
+        *Chance of snow*: 
         ${data['daily_chance_of_snow']}%
         
         `.split("\n").map(s=>s.trim()).join("\n")
