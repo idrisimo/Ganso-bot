@@ -1,5 +1,4 @@
 
-
 const formatForText = (dataList) => {
     let text = []
 
@@ -19,9 +18,17 @@ const formatForText = (dataList) => {
     return text
 }
 
-const getLocations = (descriptionString) => {
-    const citiesList = descriptionString.split(",")
-    return citiesList
+const getDescription = (descriptionString) => {
+    const descriptionList = descriptionString.split(",")
+    const timeTrigger = descriptionList.shift()
+    const citiesList = descriptionList
+    return [timeTrigger, citiesList]
 }
 
-module.exports = {formatForText, getLocations}
+const stringTimeFormatter = (timeTrigger) => {
+    let timeList = timeTrigger.split(" ")
+    timeList.push(timeList.shift())
+    return timeList.join(":")
+}
+
+module.exports = {formatForText, getDescription, stringTimeFormatter}
