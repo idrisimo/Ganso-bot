@@ -61,8 +61,6 @@ client.on('ready', async () => {
 
 client.initialize();
 
-
-
 /* Commands go here */
 client.on('message_create', async msg=>{
     let chat = await msg.getChat();
