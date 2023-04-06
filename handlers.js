@@ -1,5 +1,4 @@
 
-
 const formatForText = (dataList) => {
     let text = []
 
@@ -10,7 +9,7 @@ const formatForText = (dataList) => {
         ${data['mintemp_c']}°C | ${data['avgtemp_c']}°C | ${data['maxtemp_c']}°C
         *Chance of rain*: 
         ${data['daily_chance_of_rain']}% 
-        *Change of snow*: 
+        *Chance of snow*: 
         ${data['daily_chance_of_snow']}%
         
         `.split("\n").map(s=>s.trim()).join("\n")
@@ -19,9 +18,17 @@ const formatForText = (dataList) => {
     return text
 }
 
-const getLocations = (descriptionString) => {
-    const citiesList = descriptionString.split(",")
-    return citiesList
+const getDescription = (descriptionString) => {
+    const descriptionList = descriptionString.split(",")
+    const timeTrigger = descriptionList.shift()
+    const citiesList = descriptionList
+    return [timeTrigger, citiesList]
 }
 
-module.exports = {formatForText, getLocations}
+const stringTimeFormatter = (timeTrigger) => {
+    let timeList = timeTrigger.split(" ")
+    timeList.push(timeList.shift())
+    return timeList.join(":")
+}
+
+module.exports = {formatForText, getDescription, stringTimeFormatter}
